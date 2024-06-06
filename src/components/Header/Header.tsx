@@ -23,8 +23,8 @@ const Header: React.FC<Props> = ({title}) => {
 
 const styles = StyleSheet.create({
     header:{
-        marginTop: 32,
-        paddingVertical: 20,
+        marginTop: 10,
+        paddingVertical: 10,
         alignItems: 'center',
         backgroundColor: Colors.primary
     },

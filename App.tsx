@@ -5,10 +5,12 @@
 import React, { useEffect, useState } from 'react';
 import {
   GestureResponderEvent,
+  Keyboard,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -152,53 +154,59 @@ function App(): React.JSX.Element {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <StatusBar
+      <StatusBar 
         backgroundColor={Colors.primary}
       />
 
       <View style={styles.headerContainer}>
-        <Header title = "my todos"></Header>
+      <Header title="my todos" />
       </View>
 
-      <View style={styles.viewContainer}>
-         
-        <Input
-          inputValue={inputValue ?? ''}
-          inputValueChange={inputValueChanged}
-          placeholderText='What needs to be done?'
-          >
-        </Input>
-          
-        <SubmitButton submitToDo={submitToDo}></SubmitButton>
-      </View> 
-      <View style={styles.scrollViewContainer}>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic">
-            <ToDoList
-              todos={filtered}
-              toggleCompleteToDo={toggleCompleteToDo}
-              deleteTodo={deleteToDo}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.flexContainer}>
+          <View style={styles.viewContainer}>
+            
+            <Input
+              inputValue={inputValue ?? ''}
+              inputValueChange={inputValueChanged}
+              placeholderText='What needs to be done?'
               >
-          </ToDoList>
-        </ScrollView>
-      </View>
+            </Input>
+              
+            <SubmitButton submitToDo={submitToDo}></SubmitButton>
+          </View> 
+          <View style={styles.scrollViewContainer}>
+            <ScrollView
+              contentInsetAdjustmentBehavior="automatic"
+              keyboardShouldPersistTaps="handled"
+              style={styles.scrollView}>
+                <ToDoList
+                  todos={filtered}
+                  toggleCompleteToDo={toggleCompleteToDo}
+                  deleteTodo={deleteToDo}
+                  >
+              </ToDoList>
+            </ScrollView>
+          </View>
+         </View>
+      </TouchableWithoutFeedback>
+
       <View style={styles.selectorContainer}>
         <View style={styles.buttons}>
-            <SelectButton
-              name='All'
-              onPress={() => filterTodos("All")}
-              selected={selectedButton === "All"} />
-            <SelectButton
-              name='Active'
-              onPress={() => filterTodos("Active")}
-              selected={selectedButton === "Active"} />
-            <SelectButton
-              name='Completed'
-              onPress={() => filterTodos("Completed")}
-              selected={selectedButton === "Completed"} />
-          </View>
-    </View>
-            
+          <SelectButton
+            name='All'
+            onPress={() => filterTodos("All")}
+            selected={selectedButton === "All"} />
+          <SelectButton
+            name='Active'
+            onPress={() => filterTodos("Active")}
+            selected={selectedButton === "Active"} />
+          <SelectButton
+            name='Completed'
+            onPress={() => filterTodos("Completed")}
+            selected={selectedButton === "Completed"} />
+        </View>
+      </View>            
     </SafeAreaView>
   );
 }
@@ -210,10 +218,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary
   },
   barStyle: {
+    flex: 1,
     backgroundColor: Colors.primary
   },
   headerContainer: {
-    flex: 2
+    flex: 2,
+    backgroundColor: Colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   viewContainer: {
     flex: 3,
@@ -236,7 +248,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: "100%",
     justifyContent: 'space-evenly'
-  }
+  },
+  scrollView: {
+    flex: 1,
+  },
+  flexContainer: {
+    flex: 7,
+  },
 });
 
 export default App;
